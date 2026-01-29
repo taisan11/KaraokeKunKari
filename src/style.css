@@ -9,31 +9,31 @@
   /* Colors */
   --bg-primary: #0f0f23;
   --bg-secondary: #1a1a2e;
-  --bg-card: #16213e;
+  --bg-card: #1a1a2e;
   --accent-primary: #00ff88;
   --accent-secondary: #ffd93d;
   --accent-danger: #ff6b6b;
   --text-primary: #ffffff;
   --text-secondary: #b8b8b8;
   --border-color: #333333;
-  
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
-  
+
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  
+
   /* Shadows */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
-  
+
 
 }
 
@@ -481,33 +481,33 @@ input[type="range"]::-moz-range-thumb:hover {
   #app {
     padding: var(--spacing-md);
   }
-  
+
   .header h1 {
     font-size: 1.8rem;
   }
-  
+
   .card {
     padding: var(--spacing-lg);
   }
-  
+
   .controls {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .volume-control {
     margin-left: 0;
     justify-content: space-between;
   }
-  
+
   .score-display {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .pitch-info {
     grid-template-columns: 1fr;
   }
-  
+
   #pitch-canvas {
     height: 150px;
   }
@@ -517,17 +517,17 @@ input[type="range"]::-moz-range-thumb:hover {
   .header h1 {
     font-size: 1.5rem;
   }
-  
+
   .btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .file-upload {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .score-display {
     grid-template-columns: 1fr;
   }
@@ -711,19 +711,19 @@ input[type="range"]::-moz-range-thumb:hover {
   .pitch-display-note {
     font-size: 4rem;
   }
-  
+
   .pitch-display-freq {
     font-size: 1.2rem;
   }
-  
+
   .pitch-display-clarity-bar {
     width: 250px;
   }
-  
+
   .mode-selector {
     flex-direction: column;
   }
-  
+
   .mode-btn {
     min-width: 100%;
   }
@@ -733,16 +733,16 @@ input[type="range"]::-moz-range-thumb:hover {
   .pitch-display-note {
     font-size: 3rem;
   }
-  
+
   .pitch-display-freq {
     font-size: 1rem;
   }
-  
+
   .pitch-display-clarity-bar {
     width: 200px;
     height: 25px;
   }
-  
+
   .pitch-display-info {
     gap: var(--spacing-md);
   }
@@ -754,7 +754,7 @@ input[type="range"]::-moz-range-thumb:hover {
     /* Prevent iOS Safari from zooming on input focus */
     touch-action: manipulation;
   }
-  
+
   input,
   select,
   button {
