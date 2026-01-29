@@ -1,0 +1,17 @@
+{
+	"name": "KaraokeKunKari",
+	"compatibility_date": "2025-11-16",
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "single-page-application"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"routes": [
+		{
+			"pattern": "kkk.taisan11.f5.si",
+			"custom_domain": true
+		}
+	]
+}

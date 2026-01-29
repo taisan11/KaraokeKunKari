@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Karaoke Kun Kari - MIDIカラオケ</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>🎤 Karaoke Kun Kari</h1>
+        <p class="subtitle">MIDIベース簡易カラオケ</p>
+      </header>
+
+      <main class="main">
+        <!-- Initialization Section -->
+        <section id="init-section" class="section">
+          <div class="card">
+            <h2>🎵 開始する</h2>
+            <p class="info-text">
+              音声を使用するため、このボタンを押して初期化してください。<br>
+              <small>※ iOS/Safariでは音声の再生にユーザー操作が必要です</small>
+            </p>
+            <button id="init-button" class="btn btn-primary btn-large">
+              🎙️ 初期化して開始
+            </button>
+            <div id="init-status" class="status-message"></div>
+          </div>
+        </section>
+
+        <!-- Mode Selection Section -->
+        <section id="mode-section" class="section hidden">
+          <div class="card">
+            <h2>🎮 モードを選択</h2>
+            <div class="mode-selector">
+              <button id="mode-karaoke" class="mode-btn active">
+                <span class="mode-icon">🎤</span>
+                <span class="mode-name">カラオケモード</span>
+                <span class="mode-desc">MIDIファイルで採点</span>
+              </button>
+              <button id="mode-pitch" class="mode-btn">
+                <span class="mode-icon">🎵</span>
+                <span class="mode-name">音階表示モード</span>
+                <span class="mode-desc">音階をリアルタイム表示</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pitch Display Mode Section -->
+        <section id="pitch-display-section" class="section hidden">
+          <div class="card">
+            <h2>🎵 音階表示</h2>
+            <div class="pitch-display-container">
+              <div class="pitch-display-main">
+                <div id="pitch-display-note" class="pitch-display-note no-sound">♪</div>
+                <div id="pitch-display-freq" class="pitch-display-freq">- Hz</div>
+              </div>
+              
+              <div class="pitch-display-clarity-bar">
+                <div id="pitch-display-clarity-fill" class="pitch-display-clarity-fill" style="width: 0%;"></div>
+              </div>
+              
+              <div class="pitch-display-info">
+                <div class="pitch-display-info-item">
+                  <span class="pitch-display-info-label">MIDI</span>
+                  <span id="pitch-display-midi" class="pitch-display-info-value">-</span>
+                </div>
+                <div class="pitch-display-info-item">
+                  <span class="pitch-display-info-label">信頼度</span>
+                  <span id="pitch-display-clarity-text" class="pitch-display-info-value">-</span>
+                </div>
+              </div>
+              
+              <div class="pitch-display-controls">
+                <button id="pitch-display-stop" class="btn btn-danger">⏹️ 停止</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MIDI Upload Section -->
+        <section id="upload-section" class="section hidden">
+          <div class="card">
+            <h2>📁 MIDIファイルを読み込む</h2>
+            <div class="file-upload">
+              <input type="file" id="midi-file-input" accept=".mid,.midi" />
+              <label for="midi-file-input" class="btn btn-secondary">
+                ファイルを選択
+              </label>
+              <span id="file-name" class="file-name"></span>
+            </div>
+            <div id="midi-info" class="midi-info hidden">
+              <h3>MIDIファイル情報</h3>
+              <div id="midi-metadata"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Player Section -->
+        <section id="player-section" class="section hidden">
+          <div class="card">
+            <!-- Controls -->
+            <div class="controls">
+              <button id="play-button" class="btn btn-success">
+                ▶️ 再生
+              </button>
+              <button id="pause-button" class="btn btn-warning hidden">
+                ⏸️ 一時停止
+              </button>
+              <button id="stop-button" class="btn btn-danger">
+                ⏹️ 停止
+              </button>
+              <div class="volume-control">
+                <label for="volume-slider">🔊</label>
+                <input type="range" id="volume-slider" min="-40" max="0" value="-10" step="1" />
+                <span id="volume-value">-10 dB</span>
+              </div>
+            </div>
+
+            <!-- Seek Bar -->
+            <div class="seek-bar">
+              <span id="current-time" class="time">0:00</span>
+              <input type="range" id="seek-slider" min="0" max="100" value="0" step="0.1" />
+              <span id="duration-time" class="time">0:00</span>
+            </div>
+
+            <!-- Score Display -->
+            <div class="score-display">
+              <div class="score-item">
+                <span class="score-label">スコア</span>
+                <span id="score-value" class="score-value">0.00%</span>
+              </div>
+              <div class="score-item">
+                <span class="score-label">パーフェクト</span>
+                <span id="perfect-count" class="score-count">0</span>
+              </div>
+              <div class="score-item">
+                <span class="score-label">グッド</span>
+                <span id="acceptable-count" class="score-count">0</span>
+              </div>
+              <div class="score-item">
+                <span class="score-label">ミス</span>
+                <span id="miss-count" class="score-count">0</span>
+              </div>
+            </div>
+
+            <!-- Pitch Bar Canvas -->
+            <div class="canvas-container">
+              <h3>音程バー</h3>
+              <canvas id="pitch-canvas"></canvas>
+              <div class="legend">
+                <span class="legend-item">
+                  <span class="legend-color" style="background: #00ff88;"></span>
+                  期待音程
+                </span>
+                <span class="legend-item">
+                  <span class="legend-color" style="background: #ff6b6b;"></span>
+                  検出音程
+                </span>
+                <span class="legend-item">
+                  <span class="legend-color" style="background: #00ff88;"></span>
+                  パーフェクト
+                </span>
+                <span class="legend-item">
+                  <span class="legend-color" style="background: #ffd93d;"></span>
+                  グッド
+                </span>
+                <span class="legend-item">
+                  <span class="legend-color" style="background: #ff6b6b;"></span>
+                  ミス
+                </span>
+              </div>
+            </div>
+
+            <!-- Current Pitch Info -->
+            <div class="pitch-info">
+              <div class="pitch-info-item">
+                <span class="label">期待音程:</span>
+                <span id="expected-pitch" class="value">-</span>
+              </div>
+              <div class="pitch-info-item">
+                <span class="label">検出音程:</span>
+                <span id="detected-pitch" class="value">-</span>
+              </div>
+              <div class="pitch-info-item">
+                <span class="label">周波数:</span>
+                <span id="frequency" class="value">-</span>
+              </div>
+              <div class="pitch-info-item">
+                <span class="label">信頼度:</span>
+                <span id="clarity" class="value">-</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="section">
+          <div class="card">
+            <h2>⚙️ 設定</h2>
+            <div class="setting-item">
+              <label for="mic-toggle">
+                <input type="checkbox" id="mic-toggle" checked />
+                マイク入力を有効にする
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="resolution-select">
+                音程配列の解像度:
+                <select id="resolution-select">
+                  <option value="0.01">高 (10ms)</option>
+                  <option value="0.02" selected>中 (20ms)</option>
+                  <option value="0.04">低 (40ms)</option>
+                </select>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="strategy-select">
+                ポリフォニー解決戦略:
+                <select id="strategy-select">
+                  <option value="FIRST">最初のノート優先</option>
+                  <option value="VELOCITY" selected>最大音量優先</option>
+                  <option value="FREQUENCY">周波数重心</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p><small>Vite + TypeScript + Tone.js + pitchy</small></p>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
