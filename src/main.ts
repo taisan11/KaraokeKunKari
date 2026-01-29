@@ -155,7 +155,7 @@ function updatePitchDisplay(pitch: any) {
   const clarityPercent = pitch ? Math.round(pitch.clarity * 100) : 0;
   pitchDisplayClarityFill.style.width = `${clarityPercent}%`;
   
-  if (pitch && pitch.midi !== null && pitch.clarity >= 0.85) {
+  if (pitch && pitch.frequency > 0) {
     const noteName = midiToNoteName(Math.round(pitch.midi));
     const midiNum = Math.round(pitch.midi);
     
